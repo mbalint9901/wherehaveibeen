@@ -4,21 +4,15 @@ library(shiny)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
-  visited_countries <- reactive({
-    data %>% 
-      sf::st_as_sf() %>% 
-      filter(first_visit <= input$year_input)
-  })
-  
-  
-  map <- leaflet() %>% 
-    setView(lng = -50, lat = 30, zoom = 2) %>% 
-    addTiles() %>% 
-    addProviderTiles(providers$CartoDB.PositronNoLabels) 
-  
   output$leafletmap <- renderLeaflet({
-      map %>% 
-      addPolygons(data = visited_countries(), color = ~factpal(tier), weight = 1,
+    
+    data_geom %>%
+      filter(first_visit <= input$year_input) %>%
+      leaflet() %>% 
+      setView(lng = -50, lat = 30, zoom = 2) %>% 
+      addTiles() %>% 
+      addProviderTiles(providers$CartoDB.PositronNoLabels) %>%
+      addPolygons(color = ~factpal(tier), weight = 1,
                   layerId = data$country_code,
                   smoothFactor = 0.5, fillOpacity = 0.8,
                   opacity = 1,
