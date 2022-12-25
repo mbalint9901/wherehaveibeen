@@ -5,9 +5,9 @@ account: balint-mazzag
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 7938369
-bundleId: 6669339
+bundleId: 6671405
 url: https://balint-mazzag.shinyapps.io/wherehaveibeen/
-when: 1671844229.43617
-lastSyncTime: 1671844229.43618
+when: 1671927904.18667
+lastSyncTime: 1671927904.18668
 asMultiple: FALSE
 asStatic: FALSE

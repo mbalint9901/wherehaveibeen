@@ -1,16 +1,16 @@
 
 library(shiny)
 
-# Define server logic required to draw a histogram
+#   Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
   output$leafletmap <- renderLeaflet({
     
     data_geom %>%
       filter(first_visit <= input$year_input) %>%
-      leaflet() %>% 
-      setView(lng = -50, lat = 30, zoom = 2) %>% 
-      addTiles() %>% 
+      leaflet() %>%
+      setView(lng = -50, lat = 30, zoom = 2) %>%
+      addTiles() %>%
       addProviderTiles(providers$CartoDB.PositronNoLabels) %>%
       addPolygons(color = ~factpal(tier), weight = 1,
                   layerId = data$country_code,
@@ -18,19 +18,20 @@ shinyServer(function(input, output) {
                   opacity = 1,
                   highlightOptions = highlightOptions(color = "white", weight = 2,
                                                       bringToFront = TRUE),
-                  popup= ~str_c('<strong>', country ,
-                                '</strong><br/>Tier:', tier,
-                                '<br/>First visited:', first_visit,
-                                '<br/><a href = "https://www.wikipedia.org/wiki/', 
-                                country, 
-                                '"> Wikipedia link </a>'),
-                  label = 
-                    ~sprintf(
-                      "<strong>%s</strong><br/>First visited: %s<br/>Tier: %s",
-                      country, first_visit, tier
+                  popup= ~paste0(
+                    '<strong>', country ,
+                    '</strong><br/>Tier:', tier,
+                    '<br/>First visited:', first_visit,
+                    '<br/><a href = "https://www.wikipedia.org/wiki/',
+                    country,
+                    '"> Wikipedia link </a>'),
+                  label =
+                    ~paste0(
+                      "<img src='",image_link,"' height='24px'>",
+                      "&nbsp;&nbsp;&nbsp;&nbsp;<strong>", country, "</strong><br/>Click for more info!"
                     ) %>% lapply(htmltools::HTML))
-    })
-
+  })
+  
   
   output$datatable <- renderDataTable({
     data %>% 
@@ -46,12 +47,4 @@ shinyServer(function(input, output) {
                   ))
   })
   
-  output$timefilter_box <- renderUI({
-    sliderInput("year_input",
-                "",
-                min = min(data$first_visit),
-                value = min(data$first_visit),
-                max = max(data$first_visit),
-                ticks = FALSE, sep = "")
-  })
-  })
+})
